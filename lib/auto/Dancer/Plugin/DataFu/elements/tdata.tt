@@ -1,0 +1,1 @@
+        <td>[% IF col.bindto %][% col.data %][% ELSE %][% col.data(grid,row) %][% END %]</td>

@@ -1,0 +1,22 @@
+---
+abstract: 'Dancer HTML Form and Grid/Table engine with Input Validation'
+author:
+  - 'Al Newkirk <awncorp@cpan.org>'
+build_requires: {}
+configure_requires:
+  ExtUtils::MakeMaker: 6.31
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 4.102342, CPAN::Meta::Converter version 2.102400'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Dancer-Plugin-DataFu
+requires:
+  Array::Unique: 0
+  Data::Dumper::Concise: 0
+  File::ShareDir: 0
+  Hash::Merge: 0
+  Oogly: 0.31
+  Template: 0
+version: 0.0100

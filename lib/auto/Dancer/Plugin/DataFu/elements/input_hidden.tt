@@ -1,0 +1,1 @@
+    <input id="[% field.name %]" name="[% field.name %]" type="hidden" value="[% form.params.$this || field.value %]" />

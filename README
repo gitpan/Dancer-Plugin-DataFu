@@ -1,0 +1,47 @@
+Dancer-Plugin-DataFu - Dancer HTML Form and Grid/Table engine with Input Validation
+
+use Dancer;
+use Dancer::Plugin::DataFu;
+
+get '/login_frm' => sub {
+
+    return form->render('user.login', 'user.password');
+
+};
+
+post '/login_frm' => sub {
+
+    redirect '/dashboard' if form->validate('user.login', 'user.password');
+    redirect '/login_frm';
+
+};
+
+To install this module using code from CPAN,
+run the following commands
+
+cpan Dancer::Plugin::DataFu
+
+or
+
+perl Makefile.PL
+make
+make test
+make install
+
+To install this module using code from the git repository,
+run the following commands (Dist::Zilla required):
+
+dzil build
+cd Dancer-Plugin-DataFu-#.##
+cpan .
+
+REPOSITORY
+
+  http://github.com/alnewkirk/Dancer-Plugin-DataFu/
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2010 Al Newkirk
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.

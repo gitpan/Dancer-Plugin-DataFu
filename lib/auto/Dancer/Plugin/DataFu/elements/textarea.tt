@@ -1,0 +1,4 @@
+    <label for="[% field.name %]">[% IF field.label %][% field.label %][% ELSE %][% field.name %][% END %][% IF form.error(field.name).size() %] <br/> <span style="color:red;font-size:9px;">[% form.error(field.name).join(', ') %]</span>[% END %]</label>
+    <textarea id="[% field.name %]" name="[% field.name %]">
+    [% form.params.$this || field.value %]
+    </textarea>

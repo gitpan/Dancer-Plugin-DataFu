@@ -1,0 +1,1 @@
+        <th colspan="[% col.size %]">[% prof.header %]</th>

@@ -1,0 +1,20 @@
+    <label for="[% field.name %]">[% IF field.label %][% field.label %][% ELSE %][% field.name %][% END %][% IF form.error(field.name).size() %] <br/> <span style="color:red;font-size:9px;">[% form.error(field.name).join(', ') %]</span>[% END %]</label>
+    <select id="[% field.name %]" name="[% field.name %]">
+        [% IF form.params.$this %]
+            [% FOREACH option IN field.element.options %]
+                [%IF form.params.$this == option.value %]
+        <option value="[% option.value %]" selected="true"> [% option.label %]
+                [% ELSE %]
+        <option value="[% option.value %]"> [% option.label %]
+                [% END %]
+            [% END %]
+        [% ELSE %]
+            [% FOREACH option IN field.element.options %]
+                [% IF field.element.default == option.value %]
+        <option value="[% option.value %]" selected="true"> [% option.label %]
+                [% ELSE %]
+        <option value="[% option.value %]"> [% option.label %]
+                [% END %]
+            [% END %]
+        [% END %]
+    </select>
