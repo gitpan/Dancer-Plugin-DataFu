@@ -23,13 +23,14 @@ my %WriteMakefileArgs = (
   'NAME' => 'Dancer::Plugin::DataFu',
   'PREREQ_PM' => {
     'Array::Unique' => '0',
+    'Dancer' => '0',
     'Data::Dumper::Concise' => '0',
     'File::ShareDir' => '0',
     'Hash::Merge' => '0',
     'Oogly' => '0.31',
     'Template' => '0'
   },
-  'VERSION' => '0.0100',
+  'VERSION' => '0.0110',
   'test' => {
     'TESTS' => ''
   }

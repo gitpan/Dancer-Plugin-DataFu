@@ -3,7 +3,6 @@ MANIFEST
 META.yml
 Makefile.PL
 README
-datafu.kpf
 dist.ini
 lib/Dancer/Plugin/DataFu.pm
 lib/Dancer/Plugin/DataFu/Form.pm

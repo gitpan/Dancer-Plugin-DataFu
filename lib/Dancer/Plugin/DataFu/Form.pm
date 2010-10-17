@@ -1,7 +1,7 @@
 # ABSTRACT: Dancer HTML Form renderer
 package Dancer::Plugin::DataFu::Form;
 BEGIN {
-  $Dancer::Plugin::DataFu::Form::VERSION = '0.0100';
+  $Dancer::Plugin::DataFu::Form::VERSION = '0.0110';
 }
 
 use strict;
@@ -302,7 +302,7 @@ Dancer::Plugin::DataFu::Form - Dancer HTML Form renderer
 
 =head1 VERSION
 
-version 0.0100
+version 0.0110
 
 =head1 AUTHOR
 

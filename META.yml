@@ -14,9 +14,10 @@ meta-spec:
 name: Dancer-Plugin-DataFu
 requires:
   Array::Unique: 0
+  Dancer: 0
   Data::Dumper::Concise: 0
   File::ShareDir: 0
   Hash::Merge: 0
   Oogly: 0.31
   Template: 0
-version: 0.0100
+version: 0.0110
