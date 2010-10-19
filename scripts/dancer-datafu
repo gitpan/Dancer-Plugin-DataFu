@@ -6,7 +6,7 @@ use strict;
 
 package dancer_datafu;
 BEGIN {
-  $dancer_datafu::VERSION = '0.0110';
+  $dancer_datafu::VERSION = '0.0111';
 }
 use Dancer qw/:syntax/;
 use Dancer::Plugin::DataFu;
@@ -40,7 +40,7 @@ dancer_datafu - Copy HTML Templates to Application Directory
 
 =head1 VERSION
 
-version 0.0110
+version 0.0111
 
 =head1 SYNOPSIS
 

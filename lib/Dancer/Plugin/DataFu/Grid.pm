@@ -1,7 +1,7 @@
 # ABSTRACT: Dancer HTML Grid/Table renderer
 package Dancer::Plugin::DataFu::Grid;
 BEGIN {
-  $Dancer::Plugin::DataFu::Grid::VERSION = '0.0110';
+  $Dancer::Plugin::DataFu::Grid::VERSION = '0.0111';
 }
 
 use warnings;
@@ -23,7 +23,7 @@ use File::ShareDir qw/:ALL/;
         my $profiles = $settings->{grid}->{profiles}
           || die 'No grid profiles are configured in the config file';
         my @profiles =
-          glob path( dirname($0), ( split /[\\\/]/, $profiles ), '*.pl' );
+          glob path( config->{appdir}, ( split /[\\\/]/, $profiles ), '*.pl' );
         my $self   = {};
         my $fields = {};
     
@@ -54,7 +54,7 @@ use File::ShareDir qw/:ALL/;
     
         my $template_directory =
           $settings->{grid}->{templates}
-          ? path( dirname($0), $settings->{grid}->{templates} )
+          ? path( config->{appdir}, $settings->{grid}->{templates} )
           : module_dir('Dancer::Plugin::DataFu') . "/elements/";
     
         $self->{profiles}  = \@profiles;
@@ -206,7 +206,7 @@ Dancer::Plugin::DataFu::Grid - Dancer HTML Grid/Table renderer
 
 =head1 VERSION
 
-version 0.0110
+version 0.0111
 
 =head1 AUTHOR
 

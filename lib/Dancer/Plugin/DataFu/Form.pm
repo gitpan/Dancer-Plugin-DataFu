@@ -1,7 +1,7 @@
 # ABSTRACT: Dancer HTML Form renderer
 package Dancer::Plugin::DataFu::Form;
 BEGIN {
-  $Dancer::Plugin::DataFu::Form::VERSION = '0.0110';
+  $Dancer::Plugin::DataFu::Form::VERSION = '0.0111';
 }
 
 use strict;
@@ -140,7 +140,7 @@ sub templates {
         my $profiles = $settings->{form}->{profiles}
           || die 'No form profiles are configured in the config file';
         my @profiles =
-          glob path( dirname($0), ( split /[\\\/]/, $profiles ), '*.pl' );
+          glob path( config->{appdir}, ( split /[\\\/]/, $profiles ), '*.pl' );
         my $self   = {};
         my $fields = {};
 
@@ -172,7 +172,7 @@ sub templates {
 
         my $template_directory =
           $settings->{form}->{templates}
-          ? path( dirname($0), $settings->{form}->{templates} )
+          ? path( config->{appdir}, $settings->{form}->{templates} )
           : module_dir('Dancer::Plugin::DataFu') . "/elements/";
 
         $self->{data} =
@@ -302,7 +302,7 @@ Dancer::Plugin::DataFu::Form - Dancer HTML Form renderer
 
 =head1 VERSION
 
-version 0.0110
+version 0.0111
 
 =head1 AUTHOR
 
