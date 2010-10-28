@@ -6,7 +6,7 @@ use strict;
 
 package dancer_datafu;
 BEGIN {
-  $dancer_datafu::VERSION = '0.0111';
+  $dancer_datafu::VERSION = '0.0121';
 }
 use Dancer qw/:syntax/;
 use Dancer::Plugin::DataFu;
@@ -16,7 +16,7 @@ use Cwd;
 
 
 sub copy_templates {
-    my $to   = Cwd::getcwd();
+    my $to   = $ARGV[0] || Cwd::getcwd();
     my $from = module_dir('Dancer::Plugin::DataFu') . "/elements";
     foreach my $tmpl ( glob path $from, '*.tt' ) {
             my ( $file, $name ) = $tmpl =~ /.*[\\\/]((\w+)\.tt)/;
@@ -40,7 +40,7 @@ dancer_datafu - Copy HTML Templates to Application Directory
 
 =head1 VERSION
 
-version 0.0111
+version 0.0121
 
 =head1 SYNOPSIS
 

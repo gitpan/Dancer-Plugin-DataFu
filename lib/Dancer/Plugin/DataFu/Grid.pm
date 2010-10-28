@@ -1,9 +1,10 @@
 # ABSTRACT: Dancer HTML Grid/Table renderer
 package Dancer::Plugin::DataFu::Grid;
 BEGIN {
-  $Dancer::Plugin::DataFu::Grid::VERSION = '0.0111';
+  $Dancer::Plugin::DataFu::Grid::VERSION = '0.0121';
 }
 
+use strict;
 use warnings;
 use 5.008001;
 use Template;
@@ -14,6 +15,7 @@ use Hash::Merge qw/merge/;
 use Oogly qw/:all !error/;
 use Dancer qw/:syntax !error/;
 use File::ShareDir qw/:ALL/;
+use Data::Dumper::Concise qw/Dumper/;
 
 {
     no warnings 'redefine';
@@ -81,7 +83,7 @@ use File::ShareDir qw/:ALL/;
 }
 
 sub render {
-    my ( $self, $name, $dataset, $profile, @options ) = @_;
+    my ( $self, $name, $profile, $dataset, @options ) = @_;
     my $configuration = {};
        $profile = $self->{profile}->{$profile} if $profile;;
     
@@ -116,7 +118,6 @@ sub render {
         name    => $name,
         prof    => $profile,
         vars    => $configuration,
-        data    => $dataset,
         content => undef
     };
     
@@ -127,7 +128,8 @@ sub render {
     }
     
     $tvars->{content} = join( "\n", @grid_parts );
-    push @grid_table, $tempro->($self->temppath('trow.tt'), $tvars);
+    $tvars->{columns} = $tempro->($self->temppath('trow.tt'), $tvars)
+    if defined $profile->{columns};
     
     @grid_parts = ();
     $counter = 0;
@@ -166,7 +168,8 @@ sub render {
     
     # footer
     if (defined $profile->{navigation}) {
-        $tvars->{col} = $profile->{columns};
+        $tvars->{data} = $dataset;
+        $tvars->{col}  = $profile->{columns};
         $tvars->{navigation} = $tempro->($self->temppath('trow.tt'),
             { content => $tempro->($self->temppath('tnavigation.tt'), $tvars) }
         );
@@ -206,7 +209,7 @@ Dancer::Plugin::DataFu::Grid - Dancer HTML Grid/Table renderer
 
 =head1 VERSION
 
-version 0.0111
+version 0.0121
 
 =head1 AUTHOR
 

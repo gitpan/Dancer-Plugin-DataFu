@@ -1,20 +1,39 @@
 Dancer-Plugin-DataFu - Dancer HTML Form and Grid/Table engine with Input Validation
 
-use Dancer;
+use Dancer qw/:syntax/;
 use Dancer::Plugin::DataFu;
 
-get '/login_frm' => sub {
+    # form rendering and validation
 
-    return form->render('user.login', 'user.password');
+    get 'login' => sub {
+        return form->render('form_name', '/action', 'profile.field', 'profile.field');
+        # return form->render('login', '/submit_login', 'user.login', 'user.password');
+    };
+    
+    post 'login' => sub {
+        my $input = form;
+        return redirect '/dashboard' if $input->validate('user.login', 'user.password');
+        redirect '/login';
+    };
+    
+    # grid rendering
+    
+    # Important Note! The order arguments are received by the render function
+    # has now changed. Please examine.
+    
+    get '/user_list' => sub {
+        return grid->render('table_name', 'profile_name', $dataset);
+        # $dataset is an array of hashes
+    };
+    
+    # grid rendering with Dancer::Plugin::DBIC
+    
+    get '/user_list' => sub {
+        my $rs = schema->resultset('Foo');
+        $rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
+        return grid->render('table_name', 'profile_name', [$rs->all]);
+    };
 
-};
-
-post '/login_frm' => sub {
-
-    redirect '/dashboard' if form->validate('user.login', 'user.password');
-    redirect '/login_frm';
-
-};
 
 To install this module using code from CPAN,
 run the following commands

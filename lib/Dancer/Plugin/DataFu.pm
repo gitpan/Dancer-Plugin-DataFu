@@ -1,7 +1,7 @@
 # ABSTRACT: Dancer HTML Form and Grid/Table engine with Input Validation
 package Dancer::Plugin::DataFu;
 BEGIN {
-  $Dancer::Plugin::DataFu::VERSION = '0.0111';
+  $Dancer::Plugin::DataFu::VERSION = '0.0121';
 }
 
 use strict;
@@ -11,13 +11,15 @@ use Dancer::Plugin;
 use Dancer::Plugin::DataFu::Form;
 use Dancer::Plugin::DataFu::Grid;
 
-my  $settings = plugin_setting;
+my  $settings = {};
 
 register 'form' => sub {
+    $settings = plugin_setting;
     return Dancer::Plugin::DataFu::Form->new($settings);
 };
 
 register 'grid' => sub {
+    $settings = plugin_setting;
     return Dancer::Plugin::DataFu::Grid->new($settings);
 };
 
@@ -35,20 +37,39 @@ Dancer::Plugin::DataFu - Dancer HTML Form and Grid/Table engine with Input Valid
 
 =head1 VERSION
 
-version 0.0111
+version 0.0121
 
 =head1 SYNOPSIS
 
     # form rendering and validation
 
     get 'login' => sub {
-        return form->render('user.login', 'user.password');
+        return form->render('form_name', '/action', 'profile.field', 'profile.field');
+        # return form->render('login', '/submit_login', 'user.login', 'user.password');
     };
     
     post 'login' => sub {
         my $input = form;
-        redirect '/dashboard' if $input->validate('user.login', 'user.password');
-        return $input->render('user.login', 'user.password');
+        return redirect '/dashboard' if $input->validate('user.login', 'user.password');
+        redirect '/login';
+    };
+    
+    # grid rendering
+    
+    # Important Note! The order arguments are received by the render function
+    # has now changed. Please examine.
+    
+    get '/user_list' => sub {
+        return grid->render('table_name', 'profile_name', $dataset);
+        # $dataset is an array of hashes
+    };
+    
+    # grid rendering with Dancer::Plugin::DBIC
+    
+    get '/user_list' => sub {
+        my $rs = schema->resultset('Foo');
+        $rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
+        return grid->render('table_name', 'profile_name', [$rs->all]);
     };
 
 =head1 DESCRIPTION
@@ -86,6 +107,11 @@ manipulating pleasure, e.g.
 
     $ dancer-datafu
     ... copied HTML template from ... to ...
+    
+    or
+    
+    $ dancer-datafu /tmp/elements
+    ... copied HTML template from ... to /tmp/elements
 
 Form elements can be rendered individually or as part of a form, custom form
 elements can be created and registered for automatic use in form generation,
@@ -161,7 +187,38 @@ would be referenced as ...
 Requiring only the form name, action URL and a list of fields (profile.fieldname),
 Dancer::Plugin::DataFu makes form validation and generation fun and easy.
 
-    form->render('form', '/action', 'user.login');
+    form->render('form', '/action', 'profile.field');
+
+In some cases you may not want to use hardcoded .pl profile files,
+Dancer::Plugin::DataFu::Form provides a convenient accessor to allow you to
+manually define profiles on-demand.
+
+    my $form = form;
+    
+    $form->fields('field' => {
+        label => '...',
+        validation => sub {
+            ...
+        }
+    });
+    
+    $form->render('form', '/action');
+
+Because field definitions can contain filters which alter internal copies of the
+GET and POST parameters passed in by the form, Dancer::Plugin::DataFu::Form provides
+a convenient accessor to those modified parameters.
+
+    my $form = form;
+    
+    $form->fields('full_name' => {
+        required => 1,
+        filters => [qw/strip trim camelcase/]
+    });
+    
+    $form->validate('full_name');
+    
+    # get modified parameters
+    my $params = $form->params;
 
 =head2 FORM PROFILE SPECIFICATION
 
@@ -417,7 +474,7 @@ the name of the profile. e.g.
         { id => 109, col1 => 'column1j', col2 => 'column2j' },
     ];
 
-    grid->render('name', $dataset, 'user');
+    grid->render('name', 'profile_name', $dataset);
 
 =head2 GRID PROFILE SPECIFICATION
 
@@ -447,10 +504,10 @@ profile can have the following definitions.
         # hint: return <a href="?action=edit&id=$row->{id}">Edit</a>
         ...
     }
-    element => {
-        type => 'input_checkbox',
-        value => '1'
-    }
+    
+    # navigation is a code reference that can be used to generate a
+    # sophisticated navigation element at the beginning, end, or both ends
+    # of the rendered table
 
 =head2 GRID TEMPLATES
 
@@ -506,11 +563,15 @@ element is passed the following variables...
 
 =head2 render
 
-The render method returns compiled html for the form or grid object the called it.
+The render method returns compiled html for the form or grid object that called it.
 Additionally you can pass a hashref of key/value pairs as the last argument to
-render to include additional variables in the processing of the template.
+the render function to include additional variables in the processing of the template.
 
-    $self->render( 'form_name', '/form/action_url', @fields, \%more_vars );
+    # form context
+    $self->render( $form_name, $action_url, @profile_fields, \%more_vars );
+    
+    # grid context
+    $self->render( $grid_name, $profile_name, \@dataset );
 
 =head2 render_control
 
@@ -519,10 +580,10 @@ This is useful when you need to break out of the canned form rendering layout an
 prefer to render the form fields individually.The render_control method may be
 passed one or many form field names.
 
-    $self->render_control('field_name');
+    $form->render_control('field_name');
     
     # return multiple form elements as an array
-    $self->render_control(@fields);
+    $form->render_control(@fields);
 
 =head2 templates
 

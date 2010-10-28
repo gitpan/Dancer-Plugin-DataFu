@@ -1,7 +1,7 @@
 # ABSTRACT: Dancer HTML Form renderer
 package Dancer::Plugin::DataFu::Form;
 BEGIN {
-  $Dancer::Plugin::DataFu::Form::VERSION = '0.0111';
+  $Dancer::Plugin::DataFu::Form::VERSION = '0.0121';
 }
 
 use strict;
@@ -12,10 +12,51 @@ use Template::Stash;
 use Array::Unique;
 use Dancer::FileUtils;
 use Hash::Merge qw/merge/;
-use Oogly qw/:all !error/;
-use Dancer qw/:syntax !error/;
+use Oogly qw/:all !error !params/;
+use Dancer qw/:syntax !error !params/;
 use File::ShareDir qw/:ALL/;
 use Data::Dumper::Concise qw/Dumper/;
+
+{
+    no warnings 'redefine';
+
+    sub fields {
+        my ($self, @fields) = @_;
+        if (@fields) {
+            if ("HASH" eq ref $fields[0]) {
+                foreach my $field (%{$fields[0]}) {
+                    $self->{data}->{fields}->{$field} = $fields[0]->{$field};
+                }
+            }
+            else {
+                my $fields = { @fields };
+                foreach my $field (%{$fields}) {
+                    $self->{data}->{fields}->{$field} = $fields->{$field};
+                }
+            }
+        }
+        return $self->{data}->{fields};
+    }
+    
+    sub params {
+        my ($self, @params) = @_;
+        if (@params) {
+            if ("HASH" eq ref $params[0]) {
+                foreach my $param (%{$params[0]}) {
+                    $self->{data}->{params}->{$param} = $params[0]->{$param};
+                }
+            }
+            else {
+                my $params = { @params };
+                foreach my $param (%{$params}) {
+                    $self->{data}->{params}->{$param} = $params->{$param};
+                }
+            }
+        }
+        return $self->{data}->{params};
+    }
+
+}
 
 sub render {
     my ( $self, $name, $url, @fields ) = @_;
@@ -25,6 +66,10 @@ sub render {
     if ( ref( $fields[@fields] ) eq "HASH" ) {
         $form_vars = pop @fields;
     }
+
+    # use all established fields if none defined
+    @fields = keys %{ $self->{data}->{fields} }
+    unless @fields;
 
     my $counter    = 0;
     my @form_parts = ();
@@ -253,13 +298,13 @@ sub templates {
             name        => sub { 1 },
             filter      => sub { 1 },
             filters     => sub { 1 },
-            required   => sub { 1 },
-            min_length => sub { 1 },
-            max_length => sub { 1 },
-            data_type  => sub { 1 },
-            ref_type   => sub { 1 },
-            regex      => sub { 1 },
-            element => sub { 1 },
+            required    => sub { 1 },
+            min_length  => sub { 1 },
+            max_length  => sub { 1 },
+            data_type   => sub { 1 },
+            ref_type    => sub { 1 },
+            regex       => sub { 1 },
+            element     => sub { 1 },
 
         };
 
@@ -302,7 +347,7 @@ Dancer::Plugin::DataFu::Form - Dancer HTML Form renderer
 
 =head1 VERSION
 
-version 0.0111
+version 0.0121
 
 =head1 AUTHOR
 
