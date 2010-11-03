@@ -1,7 +1,7 @@
 # ABSTRACT: Dancer HTML Grid/Table renderer
 package Dancer::Plugin::DataFu::Grid;
 BEGIN {
-  $Dancer::Plugin::DataFu::Grid::VERSION = '0.0121';
+  $Dancer::Plugin::DataFu::Grid::VERSION = '1.103070';
 }
 
 use strict;
@@ -209,7 +209,7 @@ Dancer::Plugin::DataFu::Grid - Dancer HTML Grid/Table renderer
 
 =head1 VERSION
 
-version 0.0121
+version 1.103070
 
 =head1 AUTHOR
 

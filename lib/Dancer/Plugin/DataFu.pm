@@ -1,7 +1,7 @@
 # ABSTRACT: Dancer HTML Form and Grid/Table engine with Input Validation
 package Dancer::Plugin::DataFu;
 BEGIN {
-  $Dancer::Plugin::DataFu::VERSION = '0.0121';
+  $Dancer::Plugin::DataFu::VERSION = '1.103070';
 }
 
 use strict;
@@ -37,7 +37,7 @@ Dancer::Plugin::DataFu - Dancer HTML Form and Grid/Table engine with Input Valid
 
 =head1 VERSION
 
-version 0.0121
+version 1.103070
 
 =head1 SYNOPSIS
 

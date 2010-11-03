@@ -1,7 +1,7 @@
 # ABSTRACT: Dancer HTML Form renderer
 package Dancer::Plugin::DataFu::Form;
 BEGIN {
-  $Dancer::Plugin::DataFu::Form::VERSION = '0.0121';
+  $Dancer::Plugin::DataFu::Form::VERSION = '1.103070';
 }
 
 use strict;
@@ -208,7 +208,8 @@ sub templates {
         # Oogly::Oogly(mixins => {}, fields => $fields);
 
         my $globule = {};
-        my $params  = params;
+        # my $params  = params;
+        my $params  = Dancer::params;
         foreach my $key ( keys %{$fields} ) {
             foreach my $field ( keys %{ $fields->{$key} } ) {
                 $globule->{"$key.$field"} = $fields->{$key}->{$field};
@@ -347,7 +348,7 @@ Dancer::Plugin::DataFu::Form - Dancer HTML Form renderer
 
 =head1 VERSION
 
-version 0.0121
+version 1.103070
 
 =head1 AUTHOR
 

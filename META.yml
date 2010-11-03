@@ -20,4 +20,4 @@ requires:
   Hash::Merge: 0
   Oogly: 0.31
   Template: 0
-version: 0.0121
+version: 1.103070
